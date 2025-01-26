@@ -2,15 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const CartItemSchema = new Schema({
-  dish: { type: Schema.Types.ObjectId, ref: "Dish", required: true ,
-    validate:{
-        validator: async function (dishId) {
-            const dishExists = await mongoose.model('Dish').exists({_id:dishId})
-            return dishExists;
-        },
-        message:'Invalid dish reference'
-    }
-  },
+  dish: { type: Schema.Types.ObjectId, ref: "Dish", required: true },
   quantity: { type: Number, required: true, min: 1 },
 });
 
