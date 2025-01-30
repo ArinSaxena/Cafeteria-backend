@@ -7,7 +7,7 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   const counters = await Counter.find();
   res.json(counters);
-});
+});  
 router.post("/", async (req, res) => {
   const counter = new Counter(req.body);
   await counter.save();
