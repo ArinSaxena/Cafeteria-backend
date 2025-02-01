@@ -1,14 +1,12 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
+require("dotenv").config();
 
 const sessions = new Set(); // Stores refresh tokens
 
-const REFRESH_TOKEN_SECRET= "super30";
-const ACCESS_TOKEN_SECRET = "explorin";
-
 const generateToken = (data) => {
-  return jwt.sign(data, ACCESS_TOKEN_SECRET, { expiresIn: "20s" });
+  return jwt.sign(data, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "20s" });
 };
 
 const register = async (req, res) => {
@@ -16,7 +14,9 @@ const register = async (req, res) => {
     const { username, email, password } = req.body;
 
     if (!username || !password || !email) {
-      return res.status(400).json({ message: "Username and password are required." });
+      return res
+        .status(400)
+        .json({ message: "Username and password are required." });
     }
 
     const existingUser = await User.findOne({ email });
@@ -38,29 +38,42 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   const { email, password } = req.body;
-  
+
   if (!email || !password) {
     return res
       .status(400)
       .json({ message: "Username and password are required." });
   }
+
   const user = await User.findOne({ email });
+
   if (!user) {
     return res.status(401).json({ message: "Username not registered!" });
   }
+
   const isMatched = await bcrypt.compare(password, user.password);
   if (!isMatched) {
     return res.status(401).json({ message: "Incorrect password!" });
   }
   const tokenData = { id: user._id };
-  const refresh_token = jwt.sign(tokenData, REFRESH_TOKEN_SECRET, {
+  const refresh_token = jwt.sign(tokenData, process.env.REFRESH_TOKEN_SECRET, {
     expiresIn: "20s",
   });
   sessions.add(refresh_token);
 
   const token = generateToken(tokenData);
 
-  return res.json({ token, refresh_token });
+  // return res.json({ token, refresh_token, username: user.username });
+  return res.status(200).json({
+    token,
+    refresh_token,
+    user: {
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      noOfcartItems: user?.cartItems?.length || 0,
+    },
+  });
 };
 
 const refreshToken = (req, res) => {
@@ -72,7 +85,7 @@ const refreshToken = (req, res) => {
 
   jwt.verify(
     refresh_token,
-    REFRESH_TOKEN_SECRET,
+    process.env.REFRESH_TOKEN_SECRET,
     (err, token_data) => {
       if (err) {
         return res
@@ -97,18 +110,18 @@ const logout = (req, res) => {
   return res.status(204).json({ message: "Logged out" });
 };
 
-const getUser= async (req, res) => {
-  const id = req.params.id;
-  console.log(id);
-  try {
-    const user = await User.findById(id).select("-password");
-    console.log(user);
-    if(!user){
-      return res.status(404).json({message:"User not found!"})
-    }
-    res.json(user);
-  } catch (err) {
-    res.status(500).json({ error: "Error fetching users" });
-  }
-};
-module.exports = { register, login, refreshToken, logout,getUser };
+// const getUser= async (req, res) => {
+//   const id = req.params.id;
+//   console.log(id);
+//   try {
+//     const user = await User.findById(id).select("-password");
+//     console.log(user);
+//     if(!user){
+//       return res.status(404).json({message:"User not found!"})
+//     }
+//     res.json(user);
+//   } catch (err) {
+//     res.status(500).json({ error: "Error fetching users" });
+//   }
+// };
+module.exports = { register, login, refreshToken, logout };

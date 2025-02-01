@@ -1,5 +1,6 @@
 const express = require("express");
 const User = require("../models/user");
+const authMiddleware = require("../middlewares/authMiddleware");
 
 
 const {
@@ -10,16 +11,17 @@ const {
 } = require("../controllers/cart");
 const router = express.Router();
 
-router.use(auth);
+// router.use(authMiddleware);
+// router.use(auth);
 
 // cart
-router.get("/",getCart);
+router.get("/",authMiddleware,getCart);
 
-router.post("/:dishId", saveCart);
+router.post("/:dishId",authMiddleware, saveCart);
 
-router.patch("/:dishId", updateCart);
+router.patch("/:dishId",authMiddleware, updateCart);
 
-router.delete("/:dishId", deleteCart);
+router.delete("/:dishId",authMiddleware, deleteCart);
 
 async function auth(req, ers, next) {
   const id = "6795d16762f2193673636635";

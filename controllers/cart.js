@@ -2,6 +2,10 @@ const User = require("../models/user");
 
 const getCart = async (req, res) => {
   // also fetch user details
+  console.log(req.user)
+  const id = req.user;
+  
+  req.user = await User.findById(id).populate("cartItems.dish");
   const cart = req.user;
   res.json(cart);
 };
