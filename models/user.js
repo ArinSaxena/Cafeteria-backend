@@ -3,7 +3,9 @@ const Schema = mongoose.Schema;
 
 const CartItemSchema = new Schema({
   dish: { type: Schema.Types.ObjectId, ref: "Dish", required: true },
-  price: { type: Number, required: true },
+  price: { type: Number, 
+    // required: true 
+  },
   quantity: { type: Number, required: true, min: 1 },
 });
 
@@ -15,7 +17,7 @@ const UserSchema = new Schema({
   role: {
     type: String,
     enum: ["admin", "customer", "merchant"],
-    required: true,
+    // required: true,
     default: "customer",
   },
 });

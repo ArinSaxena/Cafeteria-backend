@@ -1,48 +1,20 @@
 const express = require("express");
 const User = require("../models/user");
+const { getUser, getUserById, saveUser, updateUserById, deleteUserById } = require("../controllers/userControllers");
 
 const router = express.Router();
 
 // Admin will call these routes not user
 
 //Users
-router.get("/", async (req, res) => {
-  try {
-    const { role } = req.query;
-    const filter = role ? { role } : {};
-    const users = await User.find(filter).select("-cart");
-    res.json(users);
-    // const users = await User.find().select("-cart");
-    // res.json(users);
-  } catch (err) {
-    res.status(500).json({ error: "Error fetching users" });
-  }
-});
+router.get("/",getUser);
 
-router.get("/:id", async (req, res) => {
-  // TODO: add counters
-  const users = await User.findById().select("-cart");
-  res.json(users);
-});
-router.post("/", async (req, res) => {
-  // const {name,email,role} = req.body;
-  // console.log(name,email,role);
-  const user = new User(req.body);
+router.get("/:id", getUserById);
+router.post("/", saveUser);
 
-  await user.save();
-  res.status(201).json(user);
-});
-router.put("/:id", async (req, res) => {
-  const user = await User.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-  });
-  res.json(user);
-});
+router.put("/:id", updateUserById);
 
-router.delete(":/id", async (req, res) => {
-  await User.findByIdAndDelete(req.params.id);
-  res.statusMessage(204).send();
-});
+router.delete(":/id", deleteUserById);
 
 
 module.exports = router;

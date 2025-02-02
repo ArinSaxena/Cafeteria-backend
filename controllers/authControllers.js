@@ -6,7 +6,7 @@ require("dotenv").config();
 const sessions = new Set(); // Stores refresh tokens
 
 const generateToken = (data) => {
-  return jwt.sign(data, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "20s" });
+  return jwt.sign(data, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "20h" });
 };
 
 const register = async (req, res) => {
@@ -57,7 +57,7 @@ const login = async (req, res) => {
   }
   const tokenData = { id: user._id };
   const refresh_token = jwt.sign(tokenData, process.env.REFRESH_TOKEN_SECRET, {
-    expiresIn: "20s",
+    expiresIn: "20h",
   });
   sessions.add(refresh_token);
 
@@ -110,18 +110,18 @@ const logout = (req, res) => {
   return res.status(204).json({ message: "Logged out" });
 };
 
-// const getUser= async (req, res) => {
-//   const id = req.params.id;
-//   console.log(id);
-//   try {
-//     const user = await User.findById(id).select("-password");
-//     console.log(user);
-//     if(!user){
-//       return res.status(404).json({message:"User not found!"})
-//     }
-//     res.json(user);
-//   } catch (err) {
-//     res.status(500).json({ error: "Error fetching users" });
-//   }
-// };
-module.exports = { register, login, refreshToken, logout };
+const getUser= async (req, res) => {
+  // const id=  req.params.id;
+  console.log(id);
+  try {
+    const user = await User.findById(id).select("-password");
+    console.log(user);
+    if(!user){
+      return res.status(404).json({message:"User not found!"})
+    }
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ error: "Error fetching users" });
+  }
+};
+module.exports = { register, login, refreshToken, logout , getUser};

@@ -15,7 +15,8 @@ router.post("/", async (req, res) => {
 });
 
 router.put("/:id", async (req, res) => {
-  const counter = await Counter.findByIdAndUpdate(req.params.id, req.body, {
+  counterId = req.params.id;
+  const counter = await Counter.findByIdAndUpdate(counterId, req.body, {
     new: true,
   });
   res.json(counter);

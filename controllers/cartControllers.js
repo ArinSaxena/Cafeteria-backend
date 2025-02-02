@@ -10,10 +10,20 @@ const getCart = async (req, res) => {
   res.json(cart);
 };
 const saveCart = async (req, res) => {
-  req.user.cartItems.push({ dish: req.params.dishId, quantity: 1 });
+  const {quantity} = req.body;
+  const dishId = req.params.dishId;
+  console.log(dishId)
+  if (!req.user) {
+    return res.status(401).json({ error: "User not found" });
+  }
+  if (!dishId) {
+    return res.status(400).json({ error: "Dish ID is required" });
+  }
+  req.user.cartItems.push({dish:dishId, quantity });      //                     ?
   await req.user.save().then((u) => u.populate("cartItems.dish"));
   console.log("qwer",req.user.cartItems)
   res.status(201).json(req.user.cartItems);
+  // console.log(req.user.cartItems);
 };
 
 const updateCart = async (req, res) => {
@@ -21,6 +31,8 @@ const updateCart = async (req, res) => {
   const {quantity} = req.body;
   try{
     const id = "6795d16762f2193673636635";
+    // const id = req.user._id;
+
     const user = await User.findById(id).populate("cartItems.dish");
   
   if(!quantity || quantity <1){
@@ -43,15 +55,10 @@ const updateCart = async (req, res) => {
 
 
 const deleteCart = async (req, res) => {
-  // const {id} =req.params; 
-  // try {
-  //   await CartItems.findByIdAndDelete(id);
-  //   res.status(200).json({ message: 'Item removed successfully.' });
-  // } catch (error) {
-  //   res.status(500).json({ error: 'Failed to remove item.' });
-  // }
-  req.user.cartItems = [];
+  const dishId = req.params.dishId;
+  req.user.cartItems= req.user.cartItems.filter((cartItem) => cartItem.dish.toString() !== dishId)
   await req.user.save();
+  console.log(req.user);
   res.json(req.user.cartItems);
 };
 module.exports = { getCart, saveCart, updateCart, deleteCart };
