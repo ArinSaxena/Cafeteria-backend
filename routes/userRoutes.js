@@ -8,7 +8,7 @@ const router = express.Router();
 // Admin will call these routes not user
 
 //Users
-router.get("/",authMiddleware,getUser);
+router.get("/",getUser);
 
 router.get("/:id", authMiddleware,getUserById);
 router.post("/", authMiddleware,saveUser);
