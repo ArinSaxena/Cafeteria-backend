@@ -111,8 +111,9 @@ const logout = (req, res) => {
 };
 
 const getUser= async (req, res) => {
-  const id=  req.params.id;
-  console.log(id);
+  // const id=  req.params.id;
+  // console.log(id);
+  const id = req.user._id;
   try {
     const user = await User.findById(id).select("-password");
     console.log(user);

@@ -7,6 +7,6 @@ router.post("/register", register);
 router.post("/login", login);
 router.post("/token", refreshToken);
 router.delete("/logout", logout);
-router.get("/:id",authMiddleware,getUser )
+router.get("/singleUser",authMiddleware,getUser )
 
 module.exports = router;

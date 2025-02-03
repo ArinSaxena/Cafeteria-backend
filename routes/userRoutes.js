@@ -15,7 +15,7 @@ router.post("/", authMiddleware,saveUser);
 
 router.put("/:id",authMiddleware, updateUserById);
 
-router.delete(":/id",authMiddleware, deleteUserById);
+router.delete("/:id",authMiddleware, deleteUserById);
 
 
 module.exports = router;

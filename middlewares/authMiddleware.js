@@ -17,7 +17,8 @@ const authMiddleware = async (req, res, next) => {
       req.user = user; // Attach the user to the request
       next();
     } catch (error) {
-      res.status(401).json({ error: "Authentication failed" });
+      console.log(error)
+      res.status(401).json({ error: "Authentication failed",error});
     }
   };
 

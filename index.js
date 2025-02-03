@@ -10,7 +10,6 @@ const dishRouter = require('./routes/dishRoutes');
 const counterRouter = require('./routes/counterRoutes');
 const cartRouter = require('./routes/cartRoutes');
 const authRoutes = require('./routes/authRoutes');
-const authMiddleware = require('./middlewares/authMiddleware');
 
 const app = express();
 
@@ -19,8 +18,6 @@ app.use(cors());
 
 
 app.use("/auth", authRoutes);
-
-// app.use(authMiddleware)
 
 app.use("/users", userRouter);
 app.use("/dishes", dishRouter);

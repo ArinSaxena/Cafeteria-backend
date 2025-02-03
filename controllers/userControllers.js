@@ -29,8 +29,10 @@ const saveUser = async (req, res) => {
 };
 
 const updateUserById = async (req, res) => {
-    try {
-    const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
+  try {
+    const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
     res.json(updatedUser);
   } catch (error) {
     res.status(500).json({ message: "Error updating user" });
@@ -38,8 +40,17 @@ const updateUserById = async (req, res) => {
 };
 
 const deleteUserById = async (req, res) => {
-  await User.findByIdAndDelete(req.params.id);
-  res.statusMessage(204).send();
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    await User.findByIdAndDelete(req.params.id);
+    res.status(204).send(); // No Content response
+  } catch (error) {
+    res.statusMessage(500).send({ message: "Server error", error });
+  }
 };
 
 module.exports = {
