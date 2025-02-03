@@ -29,10 +29,12 @@ const saveUser = async (req, res) => {
 };
 
 const updateUserById = async (req, res) => {
-  const user = await User.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-  });
-  res.json(user);
+    try {
+    const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json(updatedUser);
+  } catch (error) {
+    res.status(500).json({ message: "Error updating user" });
+  }
 };
 
 const deleteUserById = async (req, res) => {

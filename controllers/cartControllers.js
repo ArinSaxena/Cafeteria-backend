@@ -2,7 +2,7 @@ const User = require("../models/user");
 
 const getCart = async (req, res) => {
   // also fetch user details
-  console.log(req.user)
+  // console.log(req.user)
   const id = req.user;
   
   req.user = await User.findById(id).populate("cartItems.dish");
@@ -12,16 +12,16 @@ const getCart = async (req, res) => {
 const saveCart = async (req, res) => {
   const {quantity} = req.body;
   const dishId = req.params.dishId;
-  console.log(dishId)
+  // console.log(dishId)
   if (!req.user) {
     return res.status(401).json({ error: "User not found" });
   }
   if (!dishId) {
     return res.status(400).json({ error: "Dish ID is required" });
   }
-  req.user.cartItems.push({dish:dishId, quantity });      //                     ?
+  req.user.cartItems.push({dish:dishId, quantity });   
   await req.user.save().then((u) => u.populate("cartItems.dish"));
-  console.log("qwer",req.user.cartItems)
+  // console.log("qwer",req.user.cartItems)
   res.status(201).json(req.user.cartItems);
   // console.log(req.user.cartItems);
 };
@@ -30,8 +30,8 @@ const updateCart = async (req, res) => {
   const {dishId } = req.params;
   const {quantity} = req.body;
   try{
-    const id = "6795d16762f2193673636635";
-    // const id = req.user._id;
+    // const id = "6795d16762f2193673636635";
+    const id = req.user._id;
 
     const user = await User.findById(id).populate("cartItems.dish");
   
@@ -55,10 +55,16 @@ const updateCart = async (req, res) => {
 
 
 const deleteCart = async (req, res) => {
+  console.log("Hello")
   const dishId = req.params.dishId;
-  req.user.cartItems= req.user.cartItems.filter((cartItem) => cartItem.dish.toString() !== dishId)
-  await req.user.save();
-  console.log(req.user);
+  console.log(dishId)
+
+  await User.findByIdAndUpdate(
+    req.user._id, 
+    { $pull: { cartItems: { _id: dishId } } }, 
+    { new: true } 
+  );
+  
   res.json(req.user.cartItems);
 };
 module.exports = { getCart, saveCart, updateCart, deleteCart };
