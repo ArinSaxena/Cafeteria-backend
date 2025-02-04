@@ -22,6 +22,7 @@ const DishSchema = new Schema({
     ref: "Counter",
     required: true,
   },
+  image: { type: String, default: "" }, // Store image path
 });
 
 const Dish = mongoose.model("Dish", DishSchema);

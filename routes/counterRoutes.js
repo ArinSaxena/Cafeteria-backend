@@ -5,7 +5,6 @@ const router = express.Router();
 
 //Counters
 router.get("/merchant",authMiddleware,getCounterByMerchant);  
-
 router.get("/",getCounter);  
 router.post("/",createCounter);
 

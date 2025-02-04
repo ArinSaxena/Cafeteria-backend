@@ -16,10 +16,22 @@ const Dish = require("../models/dish");
   }
 
   const addDish = async (req, res) => {
+    try{
+        const {name,price, inStock, counter} = req.body;
+
+        // check if a new image is uploaded
+        const imageUrl = req.file ? `/uploads/${req.file.filename}` : req.body.image;
+        const dish = new Dish({name, price, inStock, counter, image:imageUrl});
+        await dish.save();
+        res.status(201).json(dish);
+    }catch(error){
+        res.status(500).json({error:"Error adding dish"});
+    }
+    
     // console.log(req.body)
-    const dish = new Dish(req.body);
-    await dish.save();
-    res.status(201).json(dish);
+    // const dish = new Dish(req.body);
+    // await dish.save();
+    // res.status(201).json(dish);
   }
   const editDish = async (req, res) => {
     const dish = await Dish.findByIdAndUpdate(req.params.id, req.body, {
