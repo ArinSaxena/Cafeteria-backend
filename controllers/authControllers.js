@@ -6,7 +6,7 @@ require("dotenv").config();
 const sessions = new Set(); // Stores refresh tokens
 
 const generateToken = (data) => {
-  return jwt.sign(data, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "20h" });
+  return jwt.sign(data, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "2h" });
 };
 
 const register = async (req, res) => {
@@ -57,10 +57,9 @@ const login = async (req, res) => {
   }
   const tokenData = { id: user._id };
   const refresh_token = jwt.sign(tokenData, process.env.REFRESH_TOKEN_SECRET, {
-    expiresIn: "20h",
+    expiresIn: "30h",
   });
   sessions.add(refresh_token);
-
   const token = generateToken(tokenData);
 
   // return res.json({ token, refresh_token, username: user.username });
@@ -100,7 +99,9 @@ const refreshToken = (req, res) => {
 };
 
 const logout = (req, res) => {
-  const refreshToken = req.body.token;
+  const refreshToken = req.body.refresh_token;
+  console.log(refreshToken)
+  console.log([...sessions])
 
   if (!sessions.has(refreshToken)) {
     return res.status(400).json({ message: "No operation" });

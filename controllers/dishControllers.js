@@ -18,8 +18,6 @@ const getDishByCounterId = async (req, res) => {
 const addDish = async (req, res) => {
   try {
     const { name, price, inStock, counter } = req.body;
-
-    // check if a new image is uploaded
     const imageUrl = req.file
       ? `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`
       : req.body.image;
@@ -30,16 +28,13 @@ const addDish = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: "Error adding dish" });
   }
-
-  // console.log(req.body)
-  // const dish = new Dish(req.body);
-  // await dish.save();
-  // res.status(201).json(dish);
 };
+
 const editDish = async (req, res) => {
   try {
+    const id = req.params.id;
+    console.log(id);
     const { name, price, inStock, counter } = req.body;
-    //Check if a new file is uploaded
 
     const imageUrl = req.file
       ? `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`
@@ -49,7 +44,9 @@ const editDish = async (req, res) => {
       { name, price, inStock, counter, image: imageUrl },
       { new: true }
     );
-    res.json(dish);
+    console.log(dish);
+
+    res.status(201).json(dish);
   } catch (error) {
     res.status(500).json({ error: "Error editing dish" });
   }

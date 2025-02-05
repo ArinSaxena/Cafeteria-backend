@@ -11,7 +11,7 @@ router.get("/:counterId",getDishByCounterId);
 
 router.post("/",upload.single("image"),addDish);
 
-router.put("/:id",editDish);
+router.put("/:id",upload.single("image"),editDish);
 
 router.delete("/:id", deleteDishById);
 
