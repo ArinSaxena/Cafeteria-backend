@@ -13,6 +13,8 @@ const DishSchema = new Schema({
     //   message: "Price must be greater than zero.",
     // },
   },
+  image: { type: String, default: "" }, // Store image path
+
   inStock: {
     type: Boolean,
     default: true,
@@ -22,7 +24,6 @@ const DishSchema = new Schema({
     ref: "Counter",
     required: true,
   },
-  image: { type: String, default: "" }, // Store image path
 });
 
 const Dish = mongoose.model("Dish", DishSchema);
