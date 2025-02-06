@@ -103,9 +103,9 @@ const logout = (req, res) => {
   console.log(refreshToken)
   console.log([...sessions])
 
-  if (!sessions.has(refreshToken)) {
-    return res.status(400).json({ message: "No operation" });
-  }
+  // if (!sessions.has(refreshToken)) {
+  //   return res.status(400).json({ message: "No operation" });
+  // }
 
   sessions.delete(refreshToken);
   return res.status(204).json({ message: "Logged out" });
@@ -121,7 +121,12 @@ const getUser= async (req, res) => {
     if(!user){
       return res.status(404).json({message:"User not found!"})
     }
-    res.json(user);
+    res.json( {
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      noOfcartItems: user?.cartItems?.length || 0,
+    });
   } catch (err) {
     res.status(500).json({ error: "Error fetching users" });
   }
