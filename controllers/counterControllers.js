@@ -29,7 +29,7 @@ const createCounter = async (req, res) => {
     const imageUrl = req.file
       ? `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`
       : req.body.image;
-    const counter = new Counter({ name, image: imageUrl, merchant });
+    const counter = new Counter({ name, image: imageUrl, merchant});
     await counter.save();
     res.status(201).json(counter);
     console.log(counter);

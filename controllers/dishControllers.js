@@ -5,6 +5,7 @@ const getDish = async (req, res) => {
   res.json(dishes);
 };
 
+
 const getDishByCounterId = async (req, res) => {
   try {
     const { counterId } = req.params;
@@ -17,11 +18,11 @@ const getDishByCounterId = async (req, res) => {
 
 const addDish = async (req, res) => {
   try {
-    const { name, price, inStock, counter } = req.body;
+    const { name, price, inStock, counter, description } = req.body;
     const imageUrl = req.file
       ? `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`
       : req.body.image;
-    const dish = new Dish({ name, price, inStock, counter, image: imageUrl });
+    const dish = new Dish({ name, price, inStock, counter, image: imageUrl, description });
     await dish.save();
     res.status(201).json(dish);
     console.log(dish);
@@ -34,14 +35,14 @@ const editDish = async (req, res) => {
   try {
     const id = req.params.id;
     console.log(id);
-    const { name, price, inStock, counter } = req.body;
+    const { name, price, inStock, counter,description } = req.body;
 
     const imageUrl = req.file
       ? `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`
       : req.body.image;
     const dish = await Dish.findByIdAndUpdate(
       req.params.id,
-      { name, price, inStock, counter, image: imageUrl },
+      { name, price, inStock, counter, image: imageUrl, description },
       { new: true }
     );
     console.log(dish);

@@ -13,6 +13,7 @@ const DishSchema = new Schema({
     //   message: "Price must be greater than zero.",
     // },
   },
+  description:{type:String},
   image: { type: String, default: "" }, // Store image path
 
   inStock: {
