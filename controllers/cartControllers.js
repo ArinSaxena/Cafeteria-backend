@@ -27,14 +27,17 @@ const saveCart = async (req, res) => {
 
 const updateCart = async (req, res) => {
   const {dishId} = req.params;
+  
   // const {quantity} = req.body;
   const { action } = req.body;
+  console.log(action);
+  console.log(dishId)
+
   try {
     const id = req.user._id;
 
     const user = await User.findById(id).populate("cartItems.dish");
-    console.log(user.cartItems)
-// console.log(dishId)
+    // console.log(user.cartItems)
     const item = user.cartItems.find((item) => item._id == dishId); // id comparison problem
     if (!item) {
       return res.status(404).json({ error: "Item not found in cart." });

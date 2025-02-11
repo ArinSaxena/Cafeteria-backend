@@ -5,7 +5,6 @@ const getDish = async (req, res) => {
   res.json(dishes);
 };
 
-
 const getDishByCounterId = async (req, res) => {
   try {
     const { counterId } = req.params;
@@ -35,8 +34,7 @@ const editDish = async (req, res) => {
   try {
     const id = req.params.id;
     console.log(id);
-    const { name, price, inStock, counter,description } = req.body;
-
+    const { name, price, inStock, counter, description } = req.body;
     const imageUrl = req.file
       ? `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`
       : req.body.image;
@@ -49,7 +47,8 @@ const editDish = async (req, res) => {
 
     res.status(201).json(dish);
   } catch (error) {
-    res.status(500).json({ error: "Error editing dish" });
+    console.error("Error editing dish:", error);
+    res.status(500).json({ error: "Error editing dish", details: error.message });
   }
 };
 

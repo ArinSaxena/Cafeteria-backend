@@ -19,8 +19,13 @@ const getCounterByMerchant = async (req, res) => {
 };
 
 const getCounter = async (req, res) => {
-  const counters = await Counter.find();
-  res.json(counters);
+  try {
+    const counters = await Counter.find().populate("merchant", "name"); // Only fetch the name of the merchant
+    res.json(counters);
+  } catch (error) {
+    console.error("Error fetching counters:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
 };
 
 const createCounter = async (req, res) => {

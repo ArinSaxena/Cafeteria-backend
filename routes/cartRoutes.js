@@ -14,7 +14,7 @@ router.get("/",authMiddleware, getCart);
 
 router.post("/:dishId",authMiddleware, saveCart);
 
-router.patch("/:dishId", authMiddleware, updateCart);
+router.put("/:dishId", authMiddleware, updateCart);
 
 router.delete("/:dishId", authMiddleware, deleteCart);
 

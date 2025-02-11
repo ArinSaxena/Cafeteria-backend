@@ -16,7 +16,18 @@ const path = require("path")
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+app.use(
+    cors({
+      origin: "http://localhost:3000", 
+      methods: ["GET", "POST", "PATCH", "DELETE"], 
+      allowedHeaders: ["Content-Type", "Authorization"], 
+    })
+  );
+  
+  // Handle preflight requests properly
+  app.options("*", cors()); // Respond to preflight requests
+  
+
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 
