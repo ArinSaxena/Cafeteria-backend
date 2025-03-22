@@ -44,7 +44,7 @@ const createCounter = async (req, res) => {
 };
 
 const editCounter = async (req, res) => {
-  counterId = req.params.id;
+  const counterId = req.params.id;
   const counter = await Counter.findByIdAndUpdate(counterId, req.body, {
     new: true,
   });

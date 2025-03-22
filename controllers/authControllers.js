@@ -100,8 +100,8 @@ const refreshToken = (req, res) => {
 
 const logout = (req, res) => {
   const refreshToken = req.body.refresh_token;
-  console.log(refreshToken)
-  console.log([...sessions])
+  // console.log(refreshToken)
+  // console.log([...sessions])
 
   // if (!sessions.has(refreshToken)) {
   //   return res.status(400).json({ message: "No operation" });
@@ -117,7 +117,7 @@ const getUser= async (req, res) => {
   const id = req.user._id;
   try {
     const user = await User.findById(id).select("-password");
-    console.log(user);
+    // console.log(user);
     if(!user){
       return res.status(404).json({message:"User not found!"})
     }

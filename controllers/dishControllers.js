@@ -24,7 +24,7 @@ const addDish = async (req, res) => {
     const dish = new Dish({ name, price, inStock, counter, image: imageUrl, description });
     await dish.save();
     res.status(201).json(dish);
-    console.log(dish);
+    // console.log(dish);
   } catch (error) {
     res.status(500).json({ error: "Error adding dish" });
   }
@@ -33,17 +33,20 @@ const addDish = async (req, res) => {
 const editDish = async (req, res) => {
   try {
     const id = req.params.id;
-    console.log(id);
-    const { name, price, inStock, counter, description } = req.body;
+    // console.log(id);
+    
+    const { name, price, inStock, description } = req.body;
+    // const counter = JSON.parse(req.body.counter);
+    // console.log(counter)
     const imageUrl = req.file
       ? `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`
       : req.body.image;
     const dish = await Dish.findByIdAndUpdate(
       req.params.id,
-      { name, price, inStock, counter, image: imageUrl, description },
+      { name, price, inStock, image: imageUrl, description },
       { new: true }
     );
-    console.log(dish);
+    // console.log(dish);
 
     res.status(201).json(dish);
   } catch (error) {

@@ -58,9 +58,9 @@ const updateCart = async (req, res) => {
 };
 
 const deleteCart = async (req, res) => {
-  console.log("Hello");
+  // console.log("Hello");
   const dishId = req.params.dishId;
-  console.log(dishId);
+  // console.log(dishId);
 
   await User.findByIdAndUpdate(
     req.user._id,
