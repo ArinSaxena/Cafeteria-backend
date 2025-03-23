@@ -1,7 +1,7 @@
 const express = require("express");
 const { getCounter, createCounter, editCounter, deleteCounter, getCounterByMerchant } = require("../controllers/counterControllers");
 const authMiddleware = require("../middlewares/authMiddleware");
-const upload = require("../config/multerConfig");  // Importing multer middleware
+const upload = require("../middlewares/multer");  // Importing multer middleware
 const router = express.Router();
 
 //Counters
