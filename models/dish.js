@@ -14,7 +14,7 @@ const DishSchema = new Schema({
     // },
   },
   description:{type:String},
-  image: { type: String, default: "" }, // Store image path
+  image: { type: String, requierd: true}, // Store image path
 
   inStock: {
     type: Boolean,

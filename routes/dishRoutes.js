@@ -1,6 +1,6 @@
 const express = require("express");
 const { getDish, getDishByCounterId, addDish, editDish, deleteDishById } = require("../controllers/dishControllers");
-const upload = require("../config/multerConfig");  // Importing multer middleware
+const upload = require("../middlewares/multer.js");  // Importing multer middleware
 const router = express.Router();
 
 //Dishes

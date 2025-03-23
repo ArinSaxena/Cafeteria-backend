@@ -1,5 +1,5 @@
 const Dish = require("../models/dish");
-
+const cloudinary = require("../utils/cloudinary");
 const getDish = async (req, res) => {
   const dishes = await Dish.find().populate("counter");
   res.json(dishes);
@@ -18,13 +18,26 @@ const getDishByCounterId = async (req, res) => {
 const addDish = async (req, res) => {
   try {
     const { name, price, inStock, counter, description } = req.body;
-    const imageUrl = req.file
-      ? `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`
-      : req.body.image;
-    const dish = new Dish({ name, price, inStock, counter, image: imageUrl, description });
+
+    if (!req.file) {
+      return res.status(400).json({ error: "Image file is required" });
+    }
+
+    // 🔹 Upload Image to Cloudinary
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      folder: "dishes", // ✅ Store images inside "dishes" folder in Cloudinary
+    });
+
+    const dish = new Dish({
+      name,
+      price,
+      inStock,
+      counter,
+      image:result.secure_url,  //save cloudinary image url
+      description,
+    });
     await dish.save();
     res.status(201).json(dish);
-    // console.log(dish);
   } catch (error) {
     res.status(500).json({ error: "Error adding dish" });
   }
@@ -33,11 +46,8 @@ const addDish = async (req, res) => {
 const editDish = async (req, res) => {
   try {
     const id = req.params.id;
-    // console.log(id);
-    
+
     const { name, price, inStock, description } = req.body;
-    // const counter = JSON.parse(req.body.counter);
-    // console.log(counter)
     const imageUrl = req.file
       ? `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`
       : req.body.image;
@@ -51,7 +61,9 @@ const editDish = async (req, res) => {
     res.status(201).json(dish);
   } catch (error) {
     console.error("Error editing dish:", error);
-    res.status(500).json({ error: "Error editing dish", details: error.message });
+    res
+      .status(500)
+      .json({ error: "Error editing dish", details: error.message });
   }
 };
 
