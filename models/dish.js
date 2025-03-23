@@ -5,16 +5,10 @@ const DishSchema = new Schema({
   name: { type: String, required: true },
   price: {
     type: Number,
-    // required: true,
-    // validate: {
-    //   validator: function (value) {
-    //     return value > 0;
-    //   },
-    //   message: "Price must be greater than zero.",
-    // },
   },
-  description:{type:String},
-  image: { type: String, requierd: true}, // Store image path
+  description: { type: String },
+  image: { type: String, required: true }, // Store image path
+  // imageId: { type: String, required: true }, // Store image path
 
   inStock: {
     type: Boolean,

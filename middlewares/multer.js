@@ -1,14 +1,9 @@
-import multer from "multer";
-import path from "path";
+const multer = require("multer");
 
-// Configure multer to store images in memory
-const storage = multer.diskStorage({
-  destination: "uploads/",
-  filename: (req, file, cb) => {
-    cb(null, file.fieldname + "-" + Date.now() + path.extname(file.originalname));
-  },
+const storage = multer.memoryStorage();
+
+const upload = multer({
+  storage,
 });
 
-const upload = multer({ storage });
-
-export default upload;
+module.exports = upload;

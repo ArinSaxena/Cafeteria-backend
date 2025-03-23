@@ -1,11 +1,28 @@
-import { v2 as cloudinary } from "cloudinary";
-import dotenv from "dotenv";
-dotenv.config();
+const {
+  CLOUDINARY_API_KEY,
+  CLOUDINARY_API_SECRET,
+  CLOUDINARY_CLOUD_NAME,
+} = require("../config/envConfig");
+
+const cloudinary = require("cloudinary").v2;
 
 cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
+  api_key: CLOUDINARY_API_KEY,
+  api_secret: CLOUDINARY_API_SECRET,
+  cloud_name: CLOUDINARY_CLOUD_NAME,
 });
 
-export default cloudinary;
+const uploadMedia = async (file) => {
+  try {
+    const uploadResponse = await cloudinary.uploader.upload(file, {
+      resource_type: "auto",
+    });
+    return uploadResponse;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+module.exports = {
+  uploadMedia,
+};
