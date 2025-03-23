@@ -1,3 +1,4 @@
+
 const {
   CLOUDINARY_API_KEY,
   CLOUDINARY_API_SECRET,
@@ -11,6 +12,9 @@ cloudinary.config({
   api_secret: CLOUDINARY_API_SECRET,
   cloud_name: CLOUDINARY_CLOUD_NAME,
 });
+
+
+
 
 const uploadMedia = async (file) => {
   try {

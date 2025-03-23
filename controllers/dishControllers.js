@@ -1,6 +1,6 @@
 const Dish = require("../models/dish");
 const cloudinary = require("../utils/cloudinary");
-const { uploadMedia } = require("../utils/cloudinary"); // Import Cloudinary function
+const  uploadMedia  = require("../utils/cloudinary"); // Import Cloudinary function
 const getDish = async (req, res) => {
   const dishes = await Dish.find().populate("counter");
   res.json(dishes);
