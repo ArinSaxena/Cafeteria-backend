@@ -1,6 +1,6 @@
 const Dish = require("../models/dish");
 const cloudinary = require("../utils/cloudinary");
-const  uploadMedia  = require("../utils/cloudinary"); // Import Cloudinary function
+const uploadMedia = require("../utils/cloudinary"); // Import Cloudinary function
 const getDish = async (req, res) => {
   const dishes = await Dish.find().populate("counter");
   res.json(dishes);
@@ -19,11 +19,10 @@ const getDishByCounterId = async (req, res) => {
 const addDish = async (req, res) => {
   try {
     const { name, price, inStock, counter, description } = req.body;
-    console.log(req.file);
+    // console.log(req.file);
     if (!req.file) {
       return res.status(400).json({ error: "Image file is required" });
     }
-    
 
     // ✅ Convert image to Base64 format for Cloudinary
     const fileBase64 = `data:${
@@ -53,23 +52,31 @@ const addDish = async (req, res) => {
 const editDish = async (req, res) => {
   try {
     const id = req.params.id;
+    // console.log(req.body, req.file);
 
     const { name, price, inStock, description } = req.body;
-    if (!req.file) {
-      return res.status(400).json({ error: "Image file is required" });
-    }
-    const fileBase64 = `data:${
-      req.file.mimetype
-    };base64,${req.file.buffer.toString("base64")}`;
 
-    const uploadResponse = await uploadMedia(fileBase64);
-    const imageUrl = uploadResponse.secure_url; 
+    let imageUrl;
+    if (req.file) {
+      const fileBase64 = `data:${
+        req.file.mimetype
+      };base64,${req.file.buffer.toString("base64")}`;
+
+      const uploadResponse = await uploadMedia(fileBase64);
+      imageUrl = uploadResponse.secure_url;
+    }
+
     const dish = await Dish.findByIdAndUpdate(
       req.params.id,
-      { name, price, inStock, image: imageUrl, description },
+      { name, price, inStock, description },
       { new: true }
     );
-    // console.log(dish);
+
+    if (req.file) {
+      dish.image = imageUrl;
+    }
+
+    await dish.save();
 
     res.status(201).json(dish);
   } catch (error) {

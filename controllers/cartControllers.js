@@ -30,8 +30,6 @@ const updateCart = async (req, res) => {
   
   // const {quantity} = req.body;
   const { action } = req.body;
-  console.log(action);
-  console.log(dishId)
 
   try {
     const id = req.user._id;
