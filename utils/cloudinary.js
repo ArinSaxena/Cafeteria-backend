@@ -13,9 +13,6 @@ cloudinary.config({
   cloud_name: CLOUDINARY_CLOUD_NAME,
 });
 
-
-
-
 const uploadMedia = async (file) => {
   try {
     const uploadResponse = await cloudinary.uploader.upload(file, {
@@ -27,6 +24,5 @@ const uploadMedia = async (file) => {
   }
 };
 
-module.exports = {
-  uploadMedia,
-};
+module.exports = uploadMedia;
+

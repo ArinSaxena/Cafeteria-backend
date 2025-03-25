@@ -19,10 +19,11 @@ const getDishByCounterId = async (req, res) => {
 const addDish = async (req, res) => {
   try {
     const { name, price, inStock, counter, description } = req.body;
-
+    console.log(req.file);
     if (!req.file) {
       return res.status(400).json({ error: "Image file is required" });
     }
+    
 
     // ✅ Convert image to Base64 format for Cloudinary
     const fileBase64 = `data:${

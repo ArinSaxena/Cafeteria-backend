@@ -13,17 +13,37 @@ const { FRONTEND_URL, PORT } = require('./config/envConfig');
 const app = express();
 
 app.use(express.json());
+
+const allowedOrigins = [
+  "http://localhost:3000",  // Local frontend
+  "https://cafeteria-frontend-git-main-arin-saxenas-projects.vercel.app" // Deployed frontend
+];
+
 app.use(
-    cors({
-      origin: FRONTEND_URL, 
-      allowedHeaders: ["Content-Type", "Authorization"], 
-    })
-  );
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true, 
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
+// app.use(
+//     cors({
+//       origin: "http://localhost:3000", 
+//       allowedHeaders: ["Content-Type", "Authorization"], 
+//     })
+//   );
   
-  app.options("*", cors()); // Respond to preflight requests
+//   app.options("*", cors()); // Respond to preflight requests
   
 
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+// app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 
 app.use("/auth", authRoutes);
