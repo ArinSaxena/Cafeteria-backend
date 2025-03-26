@@ -1,4 +1,5 @@
 const Counter = require("../models/counter");
+const uploadMedia = require("../utils/cloudinary"); // Import Cloudinary function
 
 const getCounterByMerchant = async (req, res) => {
   try {
@@ -30,14 +31,29 @@ const getCounter = async (req, res) => {
 
 const createCounter = async (req, res) => {
   try {
-    const { image, name, merchant } = req.body;
-    const imageUrl = req.file
-      ? `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`
-      : req.body.image;
-    const counter = new Counter({ name, image: imageUrl, merchant});
+    const { name, merchant } = req.body;
+
+    if (!req.file) {
+      return res.status(400).json({ error: "Image file is required" });
+    }
+    // ✅ Convert image to Base64 format for Cloudinary
+    const fileBase64 = `data:${
+      req.file.mimetype
+    };base64,${req.file.buffer.toString("base64")}`;
+console.log("hello")
+    // ✅ Upload the image to Cloudinary
+    const uploadResponse = await uploadMedia(fileBase64);
+    const imageUrl = uploadResponse.secure_url; // Get Cloudinary image URL
+    console.log("hello")
+
+console.log(imageUrl);
+    const counter = new Counter({
+      name,
+      merchant,
+      image:imageUrl
+    });
     await counter.save();
     res.status(201).json(counter);
-    console.log(counter);
   } catch (error) {
     res.status(500).json({ error: "Error creating counter" });
   }
